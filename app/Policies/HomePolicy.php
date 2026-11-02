@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\home;
+use App\Models\Home;
 use Illuminate\Auth\Access\Response;
 
 class HomePolicy
@@ -19,7 +19,7 @@ class HomePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, home $home): bool
+    public function view(User $user, Home $home): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class HomePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, home $home): bool
+    public function update(User $user, Home $home): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class HomePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, home $home): bool
+    public function delete(User $user, Home $home): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class HomePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, home $home): bool
+    public function restore(User $user, Home $home): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class HomePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, home $home): bool
+    public function forceDelete(User $user, Home $home): bool
     {
         return false;
     }

@@ -1,24 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Models\Category;
 use App\Http\Controllers\CategoryController;
-use App\Models\Contact;
 use App\Http\Controllers\ContactController;
-use App\Models\Home;
 use App\Http\Controllers\HomeController;
-use App\Models\Menu;
 use App\Http\Controllers\MenuController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/category', 
-    [CategoryController::class,'category']
-);
-Route::get('/contact', 
-    [ContactController::class,'contact']
-);
-Route::get('/', 
-    [HomeController::class,'home']
-);
-Route::get('/menu', 
-    [MenuController::class,'menu']
-);
+Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
+Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
+Route::get('/christmas', [MenuController::class, 'christmas'])->name('christmas');
+
+Route::get('/category', [CategoryController::class, 'category'])->name('category');
+
+Route::get('/contact', [ContactController::class, 'contact'])->name('contact');

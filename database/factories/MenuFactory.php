@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\menu;
+use App\Models\Menu;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<menu>
+ * @extends Factory<Menu>
  */
 class MenuFactory extends Factory
 {

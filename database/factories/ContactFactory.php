@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\contact;
+use App\Models\Contact;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<contact>
+ * @extends Factory<Contact>
  */
 class ContactFactory extends Factory
 {

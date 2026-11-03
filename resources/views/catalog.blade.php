@@ -7,16 +7,13 @@
 @section('content')
 
     <section class="catalog-hero {{ $catalog->is_seasonal ? 'catalog-hero--seasonal' : '' }}" style="--accent: {{ $catalog->accent }}">
+        {{-- Decoration: a soft pattern of the cake logo, plus twinkling lights for seasonal catalogs. --}}
+        <div class="catalog-hero__pattern" aria-hidden="true"></div>
         @if ($catalog->is_seasonal)
             <div class="catalog-hero__lights" aria-hidden="true"></div>
         @endif
         <div class="container catalog-hero__grid">
             <div class="catalog-hero__copy">
-                <nav class="breadcrumb breadcrumb--light" aria-label="Breadcrumb">
-                    <a href="{{ route('home') }}">Home</a>
-                    <span aria-hidden="true">/</span>
-                    <a href="{{ route('home') }}#catalogs">Catalog</a>
-                </nav>
                 <p class="eyebrow eyebrow--gold">
                     {{ $catalog->is_seasonal ? 'Limited edition' : 'All year round' }} · {{ $menus->count() }} {{ Str::plural('item', $menus->count()) }}
                 </p>

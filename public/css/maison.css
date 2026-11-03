@@ -36,6 +36,9 @@
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
+/* Sections reached from the navbar (#catalogs, #ordering, #contact) stop below the sticky header. */
+[id] { scroll-margin-top: 90px; }
+
 body {
     margin: 0;
     background: var(--cream);

@@ -15,7 +15,7 @@
                 <nav class="breadcrumb breadcrumb--light" aria-label="Breadcrumb">
                     <a href="{{ route('home') }}">Home</a>
                     <span aria-hidden="true">/</span>
-                    <a href="{{ route('catalog.index') }}">Catalog</a>
+                    <a href="{{ route('home') }}#catalogs">Catalog</a>
                 </nav>
                 <p class="eyebrow eyebrow--gold">
                     {{ $catalog->is_seasonal ? 'Limited edition' : 'All year round' }} · {{ $menus->count() }} {{ Str::plural('item', $menus->count()) }}

@@ -1,4 +1,4 @@
-<footer class="site-footer">
+<footer class="site-footer" id="contact">
     <div class="container site-footer__grid">
         <div class="site-footer__brand">
             <img src="{{ asset('images/logo-light.png') }}" alt="Maison Céval, Pure Taste. Pure Class." width="584" height="613" class="site-footer__logo">
@@ -9,9 +9,9 @@
             <h2 class="site-footer__title">Explore</h2>
             <ul class="site-footer__links">
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('catalog.index') }}">Catalog</a></li>
+                <li><a href="{{ route('home') }}#catalogs">Catalog</a></li>
                 <li><a href="{{ route('menu') }}">Menu</a></li>
-                <li><a href="{{ route('contact') }}">Contact &amp; How to Order</a></li>
+                <li><a href="#ordering">How to Order</a></li>
             </ul>
         </div>
 

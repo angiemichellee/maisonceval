@@ -9,6 +9,13 @@
             var open = root.classList.toggle('nav-open');
             toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
+        // Close the mobile menu after a link is tapped (e.g. "Catalog" or "Order now").
+        document.querySelectorAll('#site-nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                root.classList.remove('nav-open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && root.classList.contains('nav-open')) {
                 root.classList.remove('nav-open');

@@ -6,16 +6,6 @@ use App\Models\Catalog;
 
 class CatalogController extends Controller
 {
-    /** All catalogs: /catalog */
-    public function index()
-    {
-        $catalogs = Catalog::active()->ordered()
-            ->withCount(['menus' => fn ($q) => $q->available()])
-            ->get();
-
-        return view('catalogs', compact('catalogs'));
-    }
-
     /** One catalog and its products: /catalog/christmas */
     public function show(Catalog $catalog)
     {

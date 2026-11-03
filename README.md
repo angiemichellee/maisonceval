@@ -10,14 +10,14 @@ in the database, so an admin panel can be added later without changing the pages
 
 | URL | What it shows |
 | --- | --- |
-| `/` | Home: hero, catalogs, find your favourite, how to order |
-| `/catalog` | All active catalogs |
+| `/` | Home: hero, catalogs (`#catalogs`), find your favourite, how to order (`#ordering`), footer with contact details (`#contact`) |
 | `/catalog/{slug}` | One catalog and its products, e.g. `/catalog/christmas` |
 | `/menu` | Every product, grouped by catalog. Filter with `?category=cheesecakes`, `tarts`, `little-treats` |
 | `/menu/{slug}` | Product detail with flavours and an order button |
-| `/contact` | Contact channels and how to order |
 
-Old addresses `/christmas` and `/category` redirect to the catalog pages.
+Navbar: Home, Catalog (scrolls to the catalogs on the home page), Menu, and
+"Order now" (scrolls to the How to order section, which every page has).
+Old addresses `/catalog`, `/category`, `/contact` and `/christmas` redirect to the right place.
 
 ## Run it
 
@@ -37,7 +37,7 @@ Run the tests with `php artisan test`.
 2. In `database/seeders/MenuSeeder.php`, add its products with `'catalog' => 'halloween'`.
 3. Put the photos in `public/images/products/` and run `php artisan db:seed`.
 
-The new catalog then appears on the home page, the catalog page and the menu,
+The new catalog then appears on the home page, gets its own page and shows on the menu,
 with its own colour. Set `is_active` to false to hide a catalog after the season.
 
 ## Where things live

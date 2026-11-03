@@ -1,4 +1,4 @@
-<section class="section order-steps">
+<section class="section order-steps" id="ordering">
     <div class="container">
         <div class="section-head section-head--center">
             <p class="eyebrow eyebrow--center">Ordering</p>

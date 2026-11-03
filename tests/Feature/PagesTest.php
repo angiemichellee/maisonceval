@@ -16,16 +16,33 @@ class PagesTest extends TestCase
 
     public function test_main_pages_load(): void
     {
-        foreach (['/', '/catalog', '/catalog/everyday', '/catalog/christmas', '/menu', '/menu?category=tarts', '/contact'] as $url) {
+        foreach (['/', '/catalog/everyday', '/catalog/christmas', '/menu', '/menu?category=tarts', '/menu/lemon-pie-tart'] as $url) {
             $this->get($url)->assertOk()->assertSee('Maison Céval', false);
         }
     }
 
-    public function test_navbar_has_four_links(): void
+    public function test_navbar_has_home_catalog_menu_and_order_now(): void
     {
-        $this->get('/')
-            ->assertSeeInOrder(['Home', 'Catalog', 'Menu', 'Contact'])
-            ->assertDontSee('>Category<', false);
+        $this->get('/menu')
+            ->assertSeeInOrder(['Home', 'Catalog', 'Menu', 'Order now'])
+            ->assertSee('href="http://localhost/#catalogs"', false)
+            ->assertSee('href="#ordering"', false)
+            ->assertSee('id="ordering"', false);
+    }
+
+    public function test_every_page_has_the_ordering_section_and_footer_contact(): void
+    {
+        foreach (['/', '/catalog/christmas', '/menu', '/menu/lemon-pie-tart'] as $url) {
+            $this->get($url)
+                ->assertSee('id="ordering"', false)
+                ->assertSee('id="contact"', false)
+                ->assertSee('hello@maisonceval.com');
+        }
+    }
+
+    public function test_hero_has_no_explore_catalogs_button(): void
+    {
+        $this->get('/')->assertDontSee('Explore our catalogs')->assertSee('id="catalogs"', false);
     }
 
     public function test_home_shows_catalogs_from_the_database(): void
@@ -43,7 +60,6 @@ class PagesTest extends TestCase
         Menu::first()->replicate()->fill(['slug' => 'pumpkin-test', 'name' => 'Pumpkin Test Cake', 'catalog_id' => $halloween->id])->save();
 
         $this->get('/')->assertSee('Halloween Collection');
-        $this->get('/catalog')->assertSee('Halloween Collection');
         $this->get('/catalog/halloween')->assertOk()->assertSee('Pumpkin Test Cake');
         $this->get('/menu')->assertSee('Pumpkin Test Cake');
     }
@@ -79,7 +95,9 @@ class PagesTest extends TestCase
     public function test_old_addresses_redirect(): void
     {
         $this->get('/christmas')->assertRedirect('/catalog/christmas');
-        $this->get('/category')->assertRedirect('/catalog');
+        $this->get('/catalog')->assertRedirect('/#catalogs');
+        $this->get('/category')->assertRedirect('/#catalogs');
+        $this->get('/contact')->assertRedirect('/#contact');
     }
 
     public function test_unknown_pages_return_404(): void
@@ -90,10 +108,10 @@ class PagesTest extends TestCase
 
     public function test_order_button_uses_whatsapp_when_a_number_is_set(): void
     {
-        $this->get('/contact')->assertSee('https://ig.me/m/maisonceval', false);
+        $this->get('/')->assertSee('https://ig.me/m/maisonceval', false);
 
         Contact::first()->update(['whatsapp' => '0812 3456 7890']);
 
-        $this->get('/contact')->assertSee('https://wa.me/6281234567890', false);
+        $this->get('/')->assertSee('https://wa.me/6281234567890', false);
     }
 }

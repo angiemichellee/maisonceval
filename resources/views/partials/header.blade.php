@@ -1,13 +1,13 @@
 @php
-    // A page can force the highlighted item with @section('nav', 'catalog.index').
+    // A page can force the highlighted item with @section('nav', 'menu').
     $forced = trim($__env->yieldContent('nav'));
-    $isActive = fn (string $route, array $patterns) => $forced !== '' ? $forced === $route : request()->routeIs(...$patterns);
+    $isActive = fn (string $key, array $patterns) => $forced !== '' ? $forced === $key : request()->routeIs(...$patterns);
 
     $links = [
-        ['label' => 'Home', 'route' => 'home', 'active' => $isActive('home', ['home'])],
-        ['label' => 'Catalog', 'route' => 'catalog.index', 'active' => $isActive('catalog.index', ['catalog.index', 'catalog.show'])],
-        ['label' => 'Menu', 'route' => 'menu', 'active' => $isActive('menu', ['menu', 'menu.show'])],
-        ['label' => 'Contact', 'route' => 'contact', 'active' => $isActive('contact', ['contact'])],
+        ['label' => 'Home', 'href' => route('home'), 'active' => $isActive('home', ['home'])],
+        // Scrolls to the catalogs section on the home page.
+        ['label' => 'Catalog', 'href' => route('home').'#catalogs', 'active' => $isActive('catalog', ['catalog.show'])],
+        ['label' => 'Menu', 'href' => route('menu'), 'active' => $isActive('menu', ['menu', 'menu.show'])],
     ];
 @endphp
 
@@ -22,7 +22,7 @@
             <ul class="site-nav__list">
                 @foreach ($links as $link)
                     <li>
-                        <a href="{{ route($link['route']) }}"
+                        <a href="{{ $link['href'] }}"
                            class="site-nav__link {{ $link['active'] ? 'is-active' : '' }}"
                            @if ($link['active']) aria-current="page" @endif>
                             {{ $link['label'] }}
@@ -31,9 +31,8 @@
                 @endforeach
             </ul>
 
-            @if ($orderUrl = $contact->orderUrl())
-                <a href="{{ $orderUrl }}" class="btn btn--small site-nav__cta" target="_blank" rel="noopener">Order now</a>
-            @endif
+            {{-- Every page has the "Ordering" section (partials/how-to-order). --}}
+            <a href="#ordering" class="btn btn--small site-nav__cta">Order now</a>
         </nav>
 
         <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>

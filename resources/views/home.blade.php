@@ -15,8 +15,8 @@
                     with the finest ingredients and a quiet attention to every detail.
                 </p>
                 <div class="hero__actions">
-                    <a href="{{ route('catalog.index') }}" class="btn">Explore our catalogs</a>
-                    <a href="{{ route('menu') }}" class="btn btn--ghost">See the menu</a>
+                    <a href="{{ route('menu') }}" class="btn">See the menu</a>
+                    <a href="#ordering" class="btn btn--ghost">How to order</a>
                 </div>
 
                 <dl class="hero__facts">
@@ -53,7 +53,6 @@
                         <p class="eyebrow">Our catalogs</p>
                         <h2 class="section-title">Something for every season</h2>
                     </div>
-                    <a href="{{ route('catalog.index') }}" class="link-arrow">All catalogs <span aria-hidden="true">&rarr;</span></a>
                 </div>
 
                 <div class="catalog-cards">

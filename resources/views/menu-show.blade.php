@@ -96,4 +96,6 @@
         </section>
     @endif
 
+    @include('partials.how-to-order')
+
 @endsection

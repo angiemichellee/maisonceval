@@ -3,11 +3,11 @@
 @section('title', $menu->name.' · Maison Céval')
 @section('description', Str::limit($menu->description, 150))
 @section('og_image', $menu->image_url)
-@section('nav', $menu->is_christmas ? 'christmas' : 'menu')
-@section('body_class', $menu->is_christmas ? 'page-product page-product--festive' : 'page-product')
+@section('nav', 'menu')
+@section('body_class', $menu->is_seasonal ? 'page-product page-product--seasonal' : 'page-product')
 
 @php
-    $backRoute = $menu->is_christmas ? route('christmas') : route('menu');
+    $catalog = $menu->catalog;
     $message = "Hello Maison Céval, I would like to order the {$menu->name} ({$menu->price_label}).";
     $orderUrl = $contact->orderUrl($message);
 @endphp
@@ -19,22 +19,22 @@
             <nav class="breadcrumb" aria-label="Breadcrumb">
                 <a href="{{ route('home') }}">Home</a>
                 <span aria-hidden="true">/</span>
-                <a href="{{ $backRoute }}">{{ $menu->catalog_label }}</a>
-                @if ($menu->category)
+                <a href="{{ route('menu') }}">Menu</a>
+                @if ($catalog)
                     <span aria-hidden="true">/</span>
-                    <span>{{ $menu->category->name }}</span>
+                    <a href="{{ route('catalog.show', $catalog) }}">{{ $catalog->name }}</a>
                 @endif
             </nav>
 
-            <div class="product__grid">
+            <div class="product__grid" style="--accent: {{ $menu->accent }}">
                 <div class="product__media">
-                    <div class="arch {{ $menu->is_christmas ? 'arch--gold' : '' }}">
+                    <div class="arch {{ $menu->is_seasonal ? 'arch--gold' : '' }}">
                         <img src="{{ $menu->image_url }}" alt="{{ $menu->name }}" width="900" height="1200">
                     </div>
                 </div>
 
                 <div class="product__info">
-                    <p class="eyebrow">{{ $menu->is_christmas ? 'Christmas Collection' : ($menu->category->name ?? 'Maison Céval') }}</p>
+                    <p class="eyebrow">{{ $catalog->name ?? 'Maison Céval' }}@if ($menu->category) · {{ $menu->category->name }}@endif</p>
                     <h1 class="product__name">{{ $menu->display_name }}</h1>
                     <p class="product__price">{{ $menu->price_label }}</p>
 
@@ -65,11 +65,11 @@
 
                     <div class="product__actions">
                         @if ($orderUrl)
-                            <a href="{{ $orderUrl }}" class="btn {{ $menu->is_christmas ? 'btn--festive' : '' }}" target="_blank" rel="noopener">
+                            <a href="{{ $orderUrl }}" class="btn {{ $menu->is_seasonal ? 'btn--accent' : '' }}" target="_blank" rel="noopener">
                                 Order via {{ $contact->orderChannel() }}
                             </a>
                         @endif
-                        <a href="{{ $backRoute }}" class="btn btn--ghost">Back to {{ $menu->is_christmas ? 'collection' : 'menu' }}</a>
+                        <a href="{{ $catalog ? route('catalog.show', $catalog) : route('menu') }}" class="btn btn--ghost">Back to {{ $catalog ? 'catalog' : 'menu' }}</a>
                     </div>
 
                     <p class="product__note">Baked to order. Please order ahead and tell us the date you need it.</p>
@@ -84,12 +84,12 @@
                 <div class="section-head">
                     <div>
                         <p class="eyebrow">You may also like</p>
-                        <h2 class="section-title">More from the {{ $menu->is_christmas ? 'collection' : 'menu' }}</h2>
+                        <h2 class="section-title">More from {{ $catalog->name ?? 'the menu' }}</h2>
                     </div>
                 </div>
                 <div class="product-grid">
                     @foreach ($related as $item)
-                        <x-product-card :menu="$item" />
+                        <x-product-card :menu="$item" :show-catalog="false" />
                     @endforeach
                 </div>
             </div>

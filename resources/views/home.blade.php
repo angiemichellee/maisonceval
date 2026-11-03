@@ -15,8 +15,8 @@
                     with the finest ingredients and a quiet attention to every detail.
                 </p>
                 <div class="hero__actions">
-                    <a href="{{ route('menu') }}" class="btn">Explore the menu</a>
-                    <a href="{{ route('christmas') }}" class="btn btn--ghost">Christmas collection</a>
+                    <a href="{{ route('catalog.index') }}" class="btn">Explore our catalogs</a>
+                    <a href="{{ route('menu') }}" class="btn btn--ghost">See the menu</a>
                 </div>
 
                 <dl class="hero__facts">
@@ -44,69 +44,28 @@
         </div>
     </section>
 
-    {{-- ============ RIBBON ============ --}}
-    <div class="ribbon" aria-hidden="true">
-        <div class="ribbon__track">
-            @for ($i = 0; $i < 2; $i++)
-                <span>Burnt Cheesecake</span><i></i>
-                <span>Lemon Pie Tart</span><i></i>
-                <span>Iceberg</span><i></i>
-                <span>Matcha</span><i></i>
-                <span>Dubai Kunafa</span><i></i>
-                <span>Chizu</span><i></i>
-                <span>Bucket Brownies</span><i></i>
-            @endfor
-        </div>
-    </div>
-
-    {{-- ============ STORY ============ --}}
-    <section class="section story" id="story">
-        <div class="container story__grid">
-            <div class="story__media" data-reveal>
-                <div class="arch arch--soft">
-                    <img src="{{ asset('images/products/matcha-cheesecake.jpg') }}" alt="Matcha cheesecake beside a Maison Céval box" loading="lazy" width="900" height="1200">
-                </div>
-            </div>
-            <div class="story__copy" data-reveal>
-                <p class="eyebrow">Our story</p>
-                <h2 class="section-title">Every cake has a story. Every moment deserves something special.</h2>
-                <p>
-                    Maison Céval brings you flavours and experiences that put quality, beauty and attention
-                    to detail first. We believe every bake has a story, and every moment deserves to be
-                    celebrated with something special.
-                </p>
-                <p>
-                    From our caramelised Basque burnt cheesecakes to buttery tarts and gift-ready cups,
-                    each piece is made to order and finished by hand, whether it is for a birthday,
-                    a thank-you or a quiet afternoon at home.
-                </p>
-                <a href="{{ route('menu') }}" class="link-arrow">Discover our cakes <span aria-hidden="true">&rarr;</span></a>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============ SIGNATURES ============ --}}
-    @if ($featured->isNotEmpty())
-        <section class="section section--tint">
+    {{-- ============ CATALOGS (from the database) ============ --}}
+    @if ($catalogs->isNotEmpty())
+        <section class="section section--tint" id="catalogs">
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="eyebrow">Most loved</p>
-                        <h2 class="section-title">Signature bakes</h2>
+                        <p class="eyebrow">Our catalogs</p>
+                        <h2 class="section-title">Something for every season</h2>
                     </div>
-                    <a href="{{ route('menu') }}" class="link-arrow">See the full menu <span aria-hidden="true">&rarr;</span></a>
+                    <a href="{{ route('catalog.index') }}" class="link-arrow">All catalogs <span aria-hidden="true">&rarr;</span></a>
                 </div>
 
-                <div class="product-grid">
-                    @foreach ($featured as $menu)
-                        <x-product-card :menu="$menu" />
+                <div class="catalog-cards">
+                    @foreach ($catalogs as $catalog)
+                        <x-catalog-card :catalog="$catalog" />
                     @endforeach
                 </div>
             </div>
         </section>
     @endif
 
-    {{-- ============ CATEGORIES ============ --}}
+    {{-- ============ FIND YOUR FAVOURITE ============ --}}
     @if ($categories->isNotEmpty())
         <section class="section">
             <div class="container">
@@ -127,35 +86,6 @@
                             <h3 class="category-tile__name">{{ $category->name }}</h3>
                             <p class="category-tile__desc">{{ $category->description }}</p>
                             <span class="category-tile__count">{{ $category->menus_count }} {{ Str::plural('item', $category->menus_count) }}</span>
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
-    {{-- ============ CHRISTMAS ============ --}}
-    @if ($christmas->isNotEmpty())
-        <section class="festive-band">
-            <div class="container festive-band__grid">
-                <div class="festive-band__copy" data-reveal>
-                    <p class="eyebrow eyebrow--gold">Limited edition</p>
-                    <h2 class="festive-band__title">The Christmas Collection</h2>
-                    <p>
-                        Our favourite cheesecakes and gift cups, dressed for the season. Every order comes with
-                        a Merry Christmas topper, a greeting card and a ribbon, ready to give.
-                    </p>
-                    <a href="{{ route('christmas') }}" class="btn btn--gold">Shop Christmas</a>
-                </div>
-
-                <div class="festive-band__gallery">
-                    @foreach ($christmas as $menu)
-                        <a href="{{ route('menu.show', $menu) }}" class="festive-thumb" data-reveal>
-                            <img src="{{ $menu->image_url }}" alt="{{ $menu->name }}" loading="lazy" width="400" height="600">
-                            <span class="festive-thumb__label">
-                                <span>{{ str_replace('Christmas ', '', $menu->name) }}</span>
-                                <strong>{{ $menu->price_label }}</strong>
-                            </span>
                         </a>
                     @endforeach
                 </div>

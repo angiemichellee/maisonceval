@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Catalog;
 use App\Models\Category;
-use App\Models\Menu;
 
 class HomeController extends Controller
 {
     public function home()
     {
-        $featured = Menu::general()->available()->featured()->ordered()->take(4)->get();
-
-        $christmas = Menu::christmas()->available()->featured()->ordered()->take(4)->get();
-
-        $categories = Category::ordered()
-            ->withCount(['menus' => fn ($q) => $q->general()->available()])
-            ->with(['menus' => fn ($q) => $q->general()->available()->ordered()])
+        // Every active catalog (Everyday, Christmas, and any added later).
+        $catalogs = Catalog::active()->ordered()
+            ->withCount(['menus' => fn ($q) => $q->available()])
             ->get();
 
-        return view('home', compact('featured', 'christmas', 'categories'));
+        // "Find your favourite": categories that have products to show.
+        $categories = Category::ordered()
+            ->withCount(['menus' => fn ($q) => $q->available()->inActiveCatalog()])
+            ->with(['menus' => fn ($q) => $q->available()->inActiveCatalog()->ordered()])
+            ->get()
+            ->filter(fn ($category) => $category->menus_count > 0)
+            ->values();
+
+        return view('home', compact('catalogs', 'categories'));
     }
 }

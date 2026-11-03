@@ -8,10 +8,10 @@
         <div>
             <h2 class="site-footer__title">Explore</h2>
             <ul class="site-footer__links">
-                <li><a href="{{ route('menu') }}">Everyday Menu</a></li>
-                <li><a href="{{ route('christmas') }}">Christmas Collection</a></li>
-                <li><a href="{{ route('category') }}">Categories</a></li>
-                <li><a href="{{ route('contact') }}">How to Order</a></li>
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="{{ route('catalog.index') }}">Catalog</a></li>
+                <li><a href="{{ route('menu') }}">Menu</a></li>
+                <li><a href="{{ route('contact') }}">Contact &amp; How to Order</a></li>
             </ul>
         </div>
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Catalog;
 use App\Models\Category;
 use App\Models\Menu;
 use Illuminate\Database\Seeder;
@@ -9,13 +10,15 @@ use Illuminate\Database\Seeder;
 class MenuSeeder extends Seeder
 {
     /**
-     * Seeds both catalogs with the shop's real products.
+     * Seeds the shop's real products. Each product names its catalog by slug
+     * ('catalog' => 'christmas'); without one it goes in the Everyday Menu.
      * Photos live in public/images/products. Safe to run again: rows are
      * matched by slug and updated instead of duplicated.
      */
     public function run(): void
     {
         $category = Category::pluck('id', 'slug');
+        $catalog = Catalog::pluck('id', 'slug');
 
         $christmasExtras = 'Merry Christmas topper, greeting card & ribbon';
 
@@ -135,7 +138,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Christmas Iceberg Cheesecake',
                 'slug' => 'christmas-iceberg-cheesecake',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'cheesecakes',
                 'price' => 205000,
                 'description' => 'Creamy burnt cheesecake under a thick layer of rich chocolate, dressed for the holidays.',
@@ -146,7 +149,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Christmas Matcha Cheesecake',
                 'slug' => 'christmas-matcha-cheesecake',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'cheesecakes',
                 'price' => 200000,
                 'description' => 'Burnt cheesecake layered with matcha ganache, dressed for the holidays.',
@@ -157,7 +160,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Christmas Brownies Cheesecake',
                 'slug' => 'christmas-brownies-cheesecake',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'cheesecakes',
                 'price' => 195000,
                 'description' => 'Fudgy brownie base and creamy cheesecake, dressed for the holidays.',
@@ -167,7 +170,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Christmas Chocolate Cheesecake',
                 'slug' => 'christmas-chocolate-cheesecake',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'cheesecakes',
                 'price' => 175000,
                 'description' => 'Chocolate-chunk cheesecake with Callebaut ganache, decorated with festive sprinkles.',
@@ -177,7 +180,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Christmas Burnt Cheesecake',
                 'slug' => 'christmas-burnt-cheesecake',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'cheesecakes',
                 'price' => 165000,
                 'description' => 'Our original burnt cheesecake, dressed for the holidays.',
@@ -188,7 +191,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Chizu Box of 1',
                 'slug' => 'christmas-chizu-box-of-1',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'little-treats',
                 'price' => 45000,
                 'description' => 'One Chizu box in the flavour of your choice, wrapped as a gift.',
@@ -204,7 +207,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Brownies Cup of 1',
                 'slug' => 'christmas-brownies-cup-of-1',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'little-treats',
                 'price' => 35000,
                 'description' => 'One bucket of brownies in the flavour of your choice, wrapped as a gift.',
@@ -218,7 +221,7 @@ class MenuSeeder extends Seeder
             [
                 'name' => 'Cup of 2',
                 'slug' => 'christmas-cup-of-2',
-                'catalog' => Menu::CATALOG_CHRISTMAS,
+                'catalog' => 'christmas',
                 'category' => 'little-treats',
                 'price' => 71500,
                 'description' => 'A pair of cups: brownies (Original or Cheesecake) together with Chizu (Tiramisu, Chocolate Callebaut or Kunafa Pistachio).',
@@ -228,14 +231,15 @@ class MenuSeeder extends Seeder
         ];
 
         foreach ($menus as $index => $menu) {
-            $slug = $menu['category'];
-            unset($menu['category']);
+            $categorySlug = $menu['category'];
+            $catalogSlug = $menu['catalog'] ?? 'everyday';
+            unset($menu['category'], $menu['catalog']);
 
             Menu::updateOrCreate(
                 ['slug' => $menu['slug']],
                 $menu + [
-                    'category_id' => $category[$slug] ?? null,
-                    'catalog' => Menu::CATALOG_GENERAL,
+                    'category_id' => $category[$categorySlug] ?? null,
+                    'catalog_id' => $catalog[$catalogSlug] ?? null,
                     'variants' => null,
                     'includes' => null,
                     'is_featured' => false,

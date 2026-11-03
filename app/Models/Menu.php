@@ -14,12 +14,8 @@ class Menu extends Model
     /** @use HasFactory<\Database\Factories\MenuFactory> */
     use HasFactory;
 
-    public const CATALOG_GENERAL = 'general';
-
-    public const CATALOG_CHRISTMAS = 'christmas';
-
     protected $fillable = [
-        'category_id', 'name', 'slug', 'catalog', 'price', 'description',
+        'category_id', 'catalog_id', 'name', 'slug', 'price', 'description',
         'image', 'variants', 'includes', 'is_featured', 'is_available', 'sort_order',
     ];
 
@@ -38,6 +34,11 @@ class Menu extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function catalog(): BelongsTo
+    {
+        return $this->belongsTo(Catalog::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -52,14 +53,11 @@ class Menu extends Model
         return $query->where('is_available', true);
     }
 
-    public function scopeGeneral(Builder $query): Builder
+    /** Only products in active catalogs (or with no catalog). */
+    public function scopeInActiveCatalog(Builder $query): Builder
     {
-        return $query->where('catalog', self::CATALOG_GENERAL);
-    }
-
-    public function scopeChristmas(Builder $query): Builder
-    {
-        return $query->where('catalog', self::CATALOG_CHRISTMAS);
+        return $query->where(fn ($q) => $q->whereNull('catalog_id')
+            ->orWhereHas('catalog', fn ($c) => $c->where('is_active', true)));
     }
 
     public function scopeFeatured(Builder $query): Builder
@@ -114,13 +112,15 @@ class Menu extends Model
         });
     }
 
-    protected function isChristmas(): Attribute
+    /** True for products in a seasonal catalog (Christmas, Halloween...). */
+    protected function isSeasonal(): Attribute
     {
-        return Attribute::get(fn () => $this->catalog === self::CATALOG_CHRISTMAS);
+        return Attribute::get(fn () => (bool) $this->catalog?->is_seasonal);
     }
 
-    protected function catalogLabel(): Attribute
+    /** Accent colour of the product's catalog. */
+    protected function accent(): Attribute
     {
-        return Attribute::get(fn () => $this->is_christmas ? 'Christmas Collection' : 'Everyday Menu');
+        return Attribute::get(fn () => $this->catalog?->accent ?? '#64501B');
     }
 }

@@ -10,7 +10,7 @@
             <li class="step" data-reveal>
                 <span class="step__num">01</span>
                 <h3>Choose your cake</h3>
-                <p>Browse the everyday menu or the Christmas collection and pick your flavours.</p>
+                <p>Browse our catalogs or the full menu and pick your favourite cakes and flavours.</p>
             </li>
             <li class="step" data-reveal>
                 <span class="step__num">02</span>

@@ -1,13 +1,12 @@
 @php
-    // A page can force the highlighted item with @section('nav', 'christmas').
+    // A page can force the highlighted item with @section('nav', 'catalog.index').
     $forced = trim($__env->yieldContent('nav'));
     $isActive = fn (string $route, array $patterns) => $forced !== '' ? $forced === $route : request()->routeIs(...$patterns);
 
     $links = [
         ['label' => 'Home', 'route' => 'home', 'active' => $isActive('home', ['home'])],
+        ['label' => 'Catalog', 'route' => 'catalog.index', 'active' => $isActive('catalog.index', ['catalog.index', 'catalog.show'])],
         ['label' => 'Menu', 'route' => 'menu', 'active' => $isActive('menu', ['menu', 'menu.show'])],
-        ['label' => 'Christmas', 'route' => 'christmas', 'active' => $isActive('christmas', ['christmas'])],
-        ['label' => 'Category', 'route' => 'category', 'active' => $isActive('category', ['category'])],
         ['label' => 'Contact', 'route' => 'contact', 'active' => $isActive('contact', ['contact'])],
     ];
 @endphp
@@ -24,7 +23,7 @@
                 @foreach ($links as $link)
                     <li>
                         <a href="{{ route($link['route']) }}"
-                           class="site-nav__link {{ $link['active'] ? 'is-active' : '' }} {{ $link['route'] === 'christmas' ? 'site-nav__link--festive' : '' }}"
+                           class="site-nav__link {{ $link['active'] ? 'is-active' : '' }}"
                            @if ($link['active']) aria-current="page" @endif>
                             {{ $link['label'] }}
                         </a>

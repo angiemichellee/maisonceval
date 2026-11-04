@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Marcellus&display=swap" rel="stylesheet">
 
     {{-- Change the ?v= number after editing the CSS, so browsers load the new version --}}
-    <link rel="stylesheet" href="/css/maison.css?v=6">
+    <link rel="stylesheet" href="/css/maison.css?v=7">
     <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -33,6 +33,6 @@
 
     @include('layout.footer')
 
-    <script src="/js/maison.js?v=6" defer></script>
+    <script src="/js/maison.js?v=7" defer></script>
 </body>
 </html>

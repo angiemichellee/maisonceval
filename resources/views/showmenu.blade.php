@@ -10,14 +10,6 @@
 
     <section class="product {{ $catalog->is_seasonal ? 'product--seasonal' : '' }}">
         <div class="container">
-            <nav class="breadcrumb" aria-label="Breadcrumb">
-                <a href="/">Home</a>
-                <span aria-hidden="true">/</span>
-                <a href="/menu">Menu</a>
-                <span aria-hidden="true">/</span>
-                <a href="/catalog/{{ $catalog->slug }}">{{ $catalog->name }}</a>
-            </nav>
-
             <div class="product__grid" style="--accent: {{ $catalog->color }}">
                 <div class="product__media">
                     <div class="arch {{ $catalog->is_seasonal ? 'arch--gold' : '' }}">

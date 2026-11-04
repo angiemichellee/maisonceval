@@ -21,8 +21,8 @@ class ContactSeeder extends Seeder
         Contact::create([
             'instagram' => 'maisonceval',
             'email' => 'hello@maisonceval.com',
-            'phoneNumber' => null,     // e.g. '0812 3456 7890'
-            'whatsapp' => null,        // e.g. '0812 3456 7890'
+            'phoneNumber' =>  "+6285190071733",     // e.g. '0812 3456 7890'
+            'whatsapp' => "+6285190071733",        // e.g. '0812 3456 7890'
             'address' => null,         // e.g. 'Jl. ..., Jakarta'
             'opening_hours' => null,   // e.g. 'Mon–Sat, 09.00–18.00'
         ]);

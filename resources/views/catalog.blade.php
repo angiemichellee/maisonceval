@@ -7,11 +7,8 @@
 @section('content')
 
     <section class="catalog-hero {{ $catalog->is_seasonal ? 'catalog-hero--seasonal' : '' }}" style="--accent: {{ $catalog->accent }}">
-        {{-- Decoration: a soft pattern of the cake logo, plus twinkling lights for seasonal catalogs. --}}
-        <div class="catalog-hero__pattern" aria-hidden="true"></div>
-        @if ($catalog->is_seasonal)
-            <div class="catalog-hero__lights" aria-hidden="true"></div>
-        @endif
+        {{-- Soft dotted background: twinkling lights for seasonal catalogs, still dots for the others. --}}
+        <div class="catalog-hero__lights" aria-hidden="true"></div>
         <div class="container catalog-hero__grid">
             <div class="catalog-hero__copy">
                 <p class="eyebrow eyebrow--gold">

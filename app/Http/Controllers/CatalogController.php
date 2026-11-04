@@ -3,31 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Catalog;
+use App\Models\Category;
+use App\Models\Contact;
+use App\Models\Menu;
 
 class CatalogController extends Controller
 {
-    /** One catalog and its products: /catalog/christmas */
-    public function show(Catalog $catalog)
+    // One catalog and its products, e.g. /catalog/christmas
+    public function show($slug)
     {
-        abort_unless($catalog->is_active, 404);
+        $catalog = Catalog::activeData()->firstWhere('slug', $slug);
 
-        $menus = $catalog->menus()->available()
-            ->with(['category', 'catalog'])
-            ->ordered()
-            ->get();
-
-        // Group the products by category, in category order.
-        $groups = $menus
-            ->groupBy(fn ($menu) => $menu->category_id ?? 0)
-            ->sortBy(fn ($items) => [$items->first()->category?->sort_order ?? PHP_INT_MAX, $items->first()->category?->name])
-            ->map(fn ($items) => ['category' => $items->first()->category, 'menus' => $items->values()])
-            ->values();
-
-        $otherCatalogs = Catalog::active()->ordered()
-            ->whereKeyNot($catalog->getKey())
-            ->withCount(['menus' => fn ($q) => $q->available()])
-            ->get();
-
-        return view('catalog', compact('catalog', 'menus', 'groups', 'otherCatalogs'));
+        return view('catalog', [
+            'title' => $catalog->name . ' · Maison Céval',
+            'active' => 'catalog',
+            'catalog' => $catalog,
+            'menus' => Menu::visible()->where('catalog_id', $catalog->id),
+            'catalogs' => Catalog::activeData(),
+            'categories' => Category::all(),
+            'contact' => Contact::current(),
+        ]);
     }
 }

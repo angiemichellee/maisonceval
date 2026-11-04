@@ -23,13 +23,20 @@
     --xmas-gold: #D9B86C;
     --xmas-cream: #FBF3E6;
 
-    --font-display: 'Marcellus', 'Cormorant Garamond', Georgia, serif;
+    --font-display: 'Digits', 'Marcellus', 'Cormorant Garamond', Georgia, serif;
     --font-body: 'Jost', 'Helvetica Neue', Arial, sans-serif;
 
     --radius: 16px;
     --shadow: 0 1px 2px rgba(45, 38, 29, .05), 0 12px 32px -12px rgba(45, 38, 29, .18);
     --ease: cubic-bezier(.2, .7, .2, 1);
     --gutter: clamp(16px, 4vw, 40px);
+}
+
+/* Numbers in headings (e.g. "Box of 1"): Marcellus draws "1" like an "I", so digits use a sans-serif font. */
+@font-face {
+    font-family: 'Digits';
+    src: local('Jost'), local('Avenir Next'), local('Helvetica Neue'), local('Helvetica'), local('Arial'), local('Roboto');
+    unicode-range: U+0030-0039;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -461,8 +468,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .product__includes span { color: var(--xmas-gold); margin-right: 4px; }
 .product__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .product__note { margin-top: 18px; font-size: 14px; color: var(--muted); }
-.page-product--seasonal { background: var(--xmas-cream); }
-.page-product--seasonal .product__name { color: var(--accent); }
+.product--seasonal { background: var(--xmas-cream); }
+.product--seasonal .product__name { color: var(--accent); }
 @media (max-width: 860px) {
     .product__grid { grid-template-columns: 1fr; }
     .product__media { position: static; max-width: 400px; margin: 0 auto; }

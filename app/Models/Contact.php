@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,73 +10,60 @@ class Contact extends Model
     /** @use HasFactory<\Database\Factories\ContactFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'instagram', 'email', 'phoneNumber', 'whatsapp', 'address', 'opening_hours',
-    ];
+    protected $fillable = ['instagram', 'email', 'phoneNumber', 'whatsapp', 'address', 'opening_hours'];
 
     /**
-     * The shop's contact details (first row of the table).
-     * Falls back to an empty model so the pages never crash before seeding.
+     * The shop's contact details (the first row of the contacts table).
+     * If the table is still empty, return default details so the page still works.
      */
-    public static function current(): self
+    public static function current()
     {
-        return static::query()->first() ?? new static([
-            'instagram' => 'maisonceval',
-            'email' => 'hello@maisonceval.com',
-        ]);
+        $contact = Contact::all()->first();
+
+        if ($contact == null) {
+            $contact = new Contact(['instagram' => 'maisonceval', 'email' => 'hello@maisonceval.com']);
+        }
+
+        return $contact;
     }
 
-    protected function instagramHandle(): Attribute
+    public function instagramUrl()
     {
-        return Attribute::get(fn () => $this->instagram ? ltrim($this->instagram, '@') : null);
+        return 'https://instagram.com/' . $this->instagram;
     }
 
-    protected function instagramUrl(): Attribute
+    /** WhatsApp number in international format: 0812 3456 7890 -> 6281234567890 */
+    public function whatsappNumber()
     {
-        return Attribute::get(fn () => $this->instagram_handle
-            ? 'https://instagram.com/'.$this->instagram_handle
-            : null);
-    }
+        $number = preg_replace('/[^0-9]/', '', (string) $this->whatsapp);
 
-    /** WhatsApp number in international format without "+" (0812... → 62812...). */
-    protected function whatsappNumber(): Attribute
-    {
-        return Attribute::get(function () {
-            $digits = preg_replace('/\D+/', '', (string) ($this->whatsapp ?: $this->phoneNumber));
+        if (str_starts_with($number, '0')) {
+            $number = '62' . substr($number, 1);
+        }
 
-            if ($digits === '') {
-                return null;
-            }
-
-            return str_starts_with($digits, '0') ? '62'.substr($digits, 1) : $digits;
-        });
+        return $number;
     }
 
     /**
-     * Where the "Order" buttons point: WhatsApp with a ready-made message when a
-     * number is set, otherwise an Instagram direct message.
+     * Where the "Order via ..." buttons go:
+     * WhatsApp (with a ready-made message) when a number is filled in,
+     * otherwise an Instagram direct message.
      */
-    public function orderUrl(?string $message = null): ?string
+    public function orderUrl($message = 'Hello Maison Céval, I would like to place an order.')
     {
-        $message ??= 'Hello Maison Céval, I would like to place an order.';
-
-        if ($this->whatsapp_number) {
-            return 'https://wa.me/'.$this->whatsapp_number.'?text='.rawurlencode($message);
+        if ($this->whatsappNumber() != '') {
+            return 'https://wa.me/' . $this->whatsappNumber() . '?text=' . rawurlencode($message);
         }
 
-        if ($this->instagram_handle) {
-            return 'https://ig.me/m/'.$this->instagram_handle;
-        }
-
-        return $this->email ? 'mailto:'.$this->email.'?subject='.rawurlencode('Order enquiry') : null;
+        return 'https://ig.me/m/' . $this->instagram;
     }
 
-    public function orderChannel(): string
+    public function orderChannel()
     {
-        return match (true) {
-            (bool) $this->whatsapp_number => 'WhatsApp',
-            (bool) $this->instagram_handle => 'Instagram',
-            default => 'email',
-        };
+        if ($this->whatsappNumber() != '') {
+            return 'WhatsApp';
+        }
+
+        return 'Instagram';
     }
 }

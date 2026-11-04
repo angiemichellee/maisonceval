@@ -1,3 +1,4 @@
+{{-- "How to order" section --}}
 <section class="section order-steps" id="ordering">
     <div class="container">
         <div class="section-head section-head--center">
@@ -24,10 +25,8 @@
             </li>
         </ol>
 
-        @if ($orderUrl = $contact->orderUrl())
-            <div class="order-steps__cta">
-                <a href="{{ $orderUrl }}" class="btn" target="_blank" rel="noopener">Order via {{ $contact->orderChannel() }}</a>
-            </div>
-        @endif
+        <div class="order-steps__cta">
+            <a href="{{ $contact->orderUrl() }}" class="btn" target="_blank" rel="noopener">Order via {{ $contact->orderChannel() }}</a>
+        </div>
     </div>
 </section>

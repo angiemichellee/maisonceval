@@ -3,59 +3,57 @@
 Company-profile website for **Maison Céval**, a cake shop (since 2020).
 Pure Taste. Pure Class. Live at https://maisonceval.my.id
 
-Built with Laravel. Every catalog, product, category and contact detail is stored
-in the database, so an admin panel can be added later without changing the pages.
+Built with Laravel using the MVC structure: **Routes** (`routes/web.php`) →
+**Controllers** (`app/Http/Controllers`) → **Models** (`app/Models`) → **Views** (`resources/views`).
+All products, catalogs, categories and contact details come from the database.
 
-## Pages
+## Pages (routes/web.php)
 
-| URL | What it shows |
-| --- | --- |
-| `/` | Home: hero, catalogs (`#catalogs`), find your favourite, how to order (`#ordering`), footer with contact details (`#contact`) |
-| `/catalog/{slug}` | One catalog and its products, e.g. `/catalog/christmas` |
-| `/menu` | Every product, grouped by catalog. Filter with `?category=cheesecakes`, `tarts`, `little-treats` |
-| `/menu/{slug}` | Product detail with flavours and an order button |
+| URL | Controller | View |
+| --- | --- | --- |
+| `/` | `HomeController@index` | `home.blade.php` |
+| `/catalog/{slug}` e.g. `/catalog/christmas` | `CatalogController@show` | `catalog.blade.php` |
+| `/menu` | `MenuController@index` | `menu.blade.php` |
+| `/menu/category/{slug}` e.g. `/menu/category/tarts` | `MenuController@category` | `menu.blade.php` |
+| `/menu/{slug}` e.g. `/menu/lemon-pie-tart` | `MenuController@show` | `showmenu.blade.php` |
 
-Navbar: Home, Catalog (scrolls to the catalogs on the home page), Menu, and
-"Order now" (scrolls to the How to order section, which every page has).
-Old addresses `/catalog`, `/category`, `/contact` and `/christmas` redirect to the right place.
+The layout is `resources/views/layout/mainlayout.blade.php`. It includes
+`layout/navigation`, `layout/ordering` (How to order) and `layout/footer`.
+Product and catalog cards are `layout/productcard` and `layout/catalogcard`.
+
+## Database
+
+| Table | Model | Migration | Seeder | Factory |
+| --- | --- | --- | --- | --- |
+| catalogs | `Catalog` | `create_catalogs_table` | `CatalogSeeder` | `CatalogFactory` |
+| categories | `Category` | `create_categories_table` | `CategorySeeder` | `CategoryFactory` |
+| menus | `Menu` | `create_menus_table` | `MenuSeeder` | `MenuFactory` |
+| contacts | `Contact` | `create_contacts_table` | `ContactSeeder` | `ContactFactory` |
+
+`menus.catalog_id` and `menus.category_id` store the id of the product's catalog and category.
 
 ## Run it
 
 ```sh
-php artisan migrate      # creates/updates the tables
-php artisan db:seed      # loads catalogs, categories and the 20 products (safe to run again)
+php artisan migrate:fresh --seed   # create all tables and insert the data
 php artisan serve
 ```
 
-On the live server add `--force` to both commands.
-Run the tests with `php artisan test`.
+Run the seeders only once on empty tables (the `slug` columns are unique, so
+running `db:seed` twice stops with a "UNIQUE constraint" error).
+To start again with fresh data: `php artisan migrate:fresh --seed`.
 
 ## Adding a catalog (e.g. Halloween)
 
-1. In `database/seeders/CatalogSeeder.php`, add an entry (there is a commented
-   Halloween example): name, slug, tagline, cover image, colour, `is_seasonal`.
-2. In `database/seeders/MenuSeeder.php`, add its products with `'catalog' => 'halloween'`.
-3. Put the photos in `public/images/products/` and run `php artisan db:seed`.
+1. In `database/seeders/CatalogSeeder.php`, copy a `Catalog::create([...])` block (there is a Halloween example).
+2. In `database/seeders/MenuSeeder.php`, add its products with `'catalog_id' => $halloween->id`.
+3. Put the photos in `public/images/products/` and run `php artisan migrate:fresh --seed`.
 
-The new catalog then appears on the home page, gets its own page and shows on the menu,
-with its own colour. Set `is_active` to false to hide a catalog after the season.
+Set `is_active` to `false` to hide a catalog, or `is_available` to `false` to hide one product.
 
-## Where things live
+## Other files
 
-- **Catalogs:** `catalogs` table, `database/seeders/CatalogSeeder.php`
-- **Products and prices:** `menus` table, `database/seeders/MenuSeeder.php`
+- **Photos:** `public/images/products/`, logo files in `public/images/`
+- **Styles:** `public/css/maison.css` (after editing, change `?v=` in `mainlayout.blade.php`)
 - **Contact details:** `database/seeders/ContactSeeder.php`. When a WhatsApp number
-  is filled in, every "Order" button opens WhatsApp with a ready-made message.
-  Without one, the buttons open an Instagram direct message.
-- **Photos:** `public/images/products/`
-- **Logo files:** `public/images/` (`logo.png`, `logo-mark.png`, `logo-wordmark.png`, plus `-light` versions for dark backgrounds)
-- **Styles:** `public/css/maison.css` (plain CSS, no build step). The background `#FAF8F2` matches the logo.
-- **Pages:** `resources/views/` (`layouts/app.blade.php` holds the shared header and footer;
-  `components/product-card.blade.php` and `components/catalog-card.blade.php` are the cards)
-
-## Database fields (for a future admin panel)
-
-- `catalogs`: `name`, `slug`, `tagline`, `description`, `image`, `color`, `is_seasonal`, `is_active`, `sort_order`
-- `menus`: `catalog_id`, `category_id`, `name`, `slug`, `price`, `description`, `image`,
-  `variants` (JSON flavour list), `includes`, `is_featured`, `is_available`, `sort_order`
-- `categories`: `name`, `slug`, `description`, `sort_order`
+  is filled in, the "Order via ..." buttons open WhatsApp with a ready-made message.

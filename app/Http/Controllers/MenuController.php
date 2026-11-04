@@ -4,58 +4,64 @@ namespace App\Http\Controllers;
 
 use App\Models\Catalog;
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Menu;
-use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    /** Every product, grouped by catalog. Filter with ?category=tarts */
-    public function menu(Request $request)
+    // All products: /menu
+    public function index()
     {
-        $categories = Category::ordered()
-            ->whereHas('menus', fn ($q) => $q->available()->inActiveCatalog())
-            ->get();
-
-        $active = $categories->firstWhere('slug', $request->query('category'));
-
-        $menus = Menu::available()->inActiveCatalog()
-            ->with(['category', 'catalog'])
-            ->when($active, fn ($q) => $q->where('category_id', $active->id))
-            ->ordered()
-            ->get();
-
-        // One section per catalog, in catalog order.
-        $groups = Catalog::active()->ordered()->get()
-            ->map(fn ($catalog) => [
-                'catalog' => $catalog,
-                'menus' => $menus->where('catalog_id', $catalog->id)->values(),
-            ])
-            ->filter(fn ($group) => $group['menus']->isNotEmpty())
-            ->values();
-
-        $uncatalogued = $menus->whereNull('catalog_id')->values();
-
-        return view('menu', compact('categories', 'active', 'menus', 'groups', 'uncatalogued'));
+        return view('menu', [
+            'title' => 'Menu · Maison Céval',
+            'active' => 'menu',
+            'selected' => null,
+            'menus' => Menu::visible(),
+            'catalogs' => Catalog::activeData(),
+            'categories' => Category::all(),
+            'contact' => Contact::current(),
+        ]);
     }
 
-    /** One product: /menu/lemon-pie-tart */
-    public function show(Menu $menu)
+    // Products of one category: /menu/category/tarts
+    public function category($slug)
     {
-        abort_unless($menu->is_available, 404);
+        $selected = Category::all()->firstWhere('slug', $slug);
 
-        $menu->load(['category', 'catalog']);
+        if ($selected == null) {
+            abort(404);
+        }
 
-        abort_if($menu->catalog && ! $menu->catalog->is_active, 404);
+        return view('menu', [
+            'title' => $selected->name . ' · Menu · Maison Céval',
+            'active' => 'menu',
+            'selected' => $selected,
+            'menus' => Menu::visible()->where('category_id', $selected->id),
+            'catalogs' => Catalog::activeData(),
+            'categories' => Category::all(),
+            'contact' => Contact::current(),
+        ]);
+    }
 
-        $related = Menu::available()
-            ->with(['category', 'catalog'])
-            ->where('catalog_id', $menu->catalog_id)
-            ->whereKeyNot($menu->getKey())
-            ->orderByRaw('category_id = ? desc', [$menu->category_id ?? 0])
-            ->ordered()
-            ->take(4)
-            ->get();
+    // One product: /menu/lemon-pie-tart
+    public function show($slug)
+    {
+        $menu = Menu::visible()->firstWhere('slug', $slug);
 
-        return view('menu-show', compact('menu', 'related'));
+        if ($menu == null) {
+            abort(404);
+        }
+
+        return view('showmenu', [
+            'title' => $menu->name . ' · Maison Céval',
+            'active' => 'menu',
+            'menu' => $menu,
+            'catalog' => Catalog::all()->firstWhere('id', $menu->catalog_id),
+            'category' => Category::all()->firstWhere('id', $menu->category_id),
+            'related' => Menu::related($menu),
+            'catalogs' => Catalog::activeData(),
+            'categories' => Category::all(),
+            'contact' => Contact::current(),
+        ]);
     }
 }

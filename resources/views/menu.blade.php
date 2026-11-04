@@ -1,27 +1,32 @@
-@extends('layouts.app')
+@extends('layout.mainlayout')
 
-@section('title', ($active ? $active->name.' · ' : '').'Menu · Maison Céval')
-@section('description', 'The full Maison Céval menu with prices: Basque burnt cheesecakes, pie tarts, Chizu, Dubai kunafa treats and seasonal collections.')
+@section('title', $title)
 
 @section('content')
 
     <section class="page-hero">
         <div class="container">
             <p class="eyebrow eyebrow--center">Menu</p>
-            <h1 class="page-hero__title">{{ $active?->name ?? 'Our Menu' }}</h1>
-            <p class="page-hero__lead">
-                {{ $active?->description ?? 'Every cake, tart and treat we bake, with prices. Everything is made to order.' }}
-            </p>
+
+            @if ($selected == null)
+                <h1 class="page-hero__title">Our Menu</h1>
+                <p class="page-hero__lead">Every cake, tart and treat we bake, with prices. Everything is made to order.</p>
+            @else
+                <h1 class="page-hero__title">{{ $selected->name }}</h1>
+                <p class="page-hero__lead">{{ $selected->description }}</p>
+            @endif
         </div>
     </section>
 
     <section class="section section--flush-top">
         <div class="container">
+
+            {{-- Category filter: All / Cheesecakes / Tarts / Little Treats --}}
             <nav class="filter" aria-label="Filter by category">
-                <a href="{{ route('menu') }}" class="filter__pill {{ $active ? '' : 'is-active' }}">All</a>
+                <a href="/menu" class="filter__pill {{ $selected == null ? 'is-active' : '' }}">All</a>
                 @foreach ($categories as $category)
-                    <a href="{{ route('menu', ['category' => $category->slug]) }}"
-                       class="filter__pill {{ $active?->is($category) ? 'is-active' : '' }}">{{ $category->name }}</a>
+                    <a href="/menu/category/{{ $category->slug }}"
+                       class="filter__pill {{ $selected != null && $selected->id == $category->id ? 'is-active' : '' }}">{{ $category->name }}</a>
                 @endforeach
             </nav>
 
@@ -29,36 +34,28 @@
                 <p class="empty-state">No cakes here yet. Please check back soon.</p>
             @endif
 
-            @foreach ($groups as $group)
-                <div class="menu-group" id="{{ $group['catalog']->slug }}" style="--accent: {{ $group['catalog']->accent }}">
+            {{-- One section per catalog: Everyday Menu, Christmas Collection, ... --}}
+            @foreach ($catalogs as $catalog)
+                @php
+                    $items = $menus->where('catalog_id', $catalog->id);
+                @endphp
+
+                @continue($items->isEmpty())
+
+                <div class="menu-group" id="{{ $catalog->slug }}" style="--accent: {{ $catalog->color }}">
                     <div class="menu-group__head">
-                        <h2 class="menu-group__title">{{ $group['catalog']->name }}</h2>
-                        @if ($group['catalog']->tagline)
-                            <p>{{ $group['catalog']->tagline }}</p>
-                        @endif
-                        <a href="{{ route('catalog.show', $group['catalog']) }}" class="link-arrow menu-group__link">View catalog <span aria-hidden="true">&rarr;</span></a>
+                        <h2 class="menu-group__title">{{ $catalog->name }}</h2>
+                        <p>{{ $catalog->tagline }}</p>
+                        <a href="/catalog/{{ $catalog->slug }}" class="link-arrow menu-group__link">View catalog <span aria-hidden="true">&rarr;</span></a>
                     </div>
                     <div class="product-grid">
-                        @foreach ($group['menus'] as $menu)
-                            <x-product-card :menu="$menu" :show-catalog="false" />
+                        @foreach ($items as $menu)
+                            @include('layout.productcard', ['menu' => $menu])
                         @endforeach
                     </div>
                 </div>
             @endforeach
-
-            @if ($uncatalogued->isNotEmpty())
-                <div class="menu-group">
-                    <div class="menu-group__head"><h2 class="menu-group__title">More</h2></div>
-                    <div class="product-grid">
-                        @foreach ($uncatalogued as $menu)
-                            <x-product-card :menu="$menu" :show-catalog="false" />
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
     </section>
-
-    @include('partials.how-to-order')
 
 @endsection

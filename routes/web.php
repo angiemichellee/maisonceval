@@ -5,16 +5,19 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
+// Home page
+Route::get('/', [HomeController::class, 'index']);
 
 // One catalog and its products, e.g. /catalog/christmas
-Route::get('/catalog/{catalog}', [CatalogController::class, 'show'])->name('catalog.show');
+Route::get('/catalog/{slug}', [CatalogController::class, 'show']);
 
-Route::get('/menu', [MenuController::class, 'menu'])->name('menu');
-Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
+// Menu: all products, products of one category, and one product
+Route::get('/menu', [MenuController::class, 'index']);
+Route::get('/menu/category/{slug}', [MenuController::class, 'category']);
+Route::get('/menu/{slug}', [MenuController::class, 'show']);
 
-// Old addresses, kept so existing links and bookmarks still work.
-Route::redirect('/catalog', '/#catalogs', 301);
-Route::redirect('/category', '/#catalogs', 301);
-Route::redirect('/contact', '/#contact', 301);
-Route::redirect('/christmas', '/catalog/christmas', 301);
+// Old addresses, so links people saved still work
+Route::redirect('/catalog', '/#catalogs');
+Route::redirect('/category', '/#catalogs');
+Route::redirect('/contact', '/#contact');
+Route::redirect('/christmas', '/catalog/christmas');

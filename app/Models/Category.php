@@ -2,30 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'description', 'sort_order'];
-
-    public function menus(): HasMany
-    {
-        return $this->hasMany(Menu::class);
-    }
-
-    public function scopeOrdered(Builder $query): Builder
-    {
-        return $query->orderBy('sort_order')->orderBy('name');
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
+    protected $fillable = ['name', 'slug', 'description'];
 }

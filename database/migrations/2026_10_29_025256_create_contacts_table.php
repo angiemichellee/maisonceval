@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->String('instagram');
-            $table->String('email');
-            $table->integer('phoneNumber');
+            $table->string('instagram')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phoneNumber')->nullable();   // text, because numbers start with 0 / +62
+            $table->string('whatsapp')->nullable();
+            $table->string('address')->nullable();
+            $table->string('opening_hours')->nullable();
             $table->timestamps();
         });
     }

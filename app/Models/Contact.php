@@ -12,6 +12,9 @@ class Contact extends Model
 
     protected $fillable = ['instagram', 'email', 'phoneNumber', 'whatsapp', 'address', 'opening_hours'];
 
+
+
+    
     /**
      * The shop's contact details (the first row of the contacts table).
      * If the table is still empty, return default details so the page still works.

@@ -14,8 +14,10 @@ class ContactSeeder extends Seeder
      *
      *   php artisan db:seed --class=ContactSeeder
      */
-    public function run(): void
-    {
+
+
+
+    public function run(): void {
         Contact::create([
             'instagram' => 'maisonceval',
             'email' => 'hello@maisonceval.com',

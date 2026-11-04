@@ -11,19 +11,5 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CatalogFactory extends Factory
 {
-    protected $model = Catalog::class;
 
-    public function definition(): array
-    {
-        return [
-            'name' => $this->faker->words(2, true),
-            'slug' => $this->faker->unique()->slug(2),
-            'tagline' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
-            'image' => null,
-            'color' => $this->faker->hexColor(),
-            'is_seasonal' => $this->faker->boolean(),
-            'is_active' => true,
-        ];
-    }
 }

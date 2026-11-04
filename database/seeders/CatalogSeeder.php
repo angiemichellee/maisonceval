@@ -12,8 +12,11 @@ class CatalogSeeder extends Seeder
      *
      *   php artisan db:seed --class=CatalogSeeder
      */
-    public function run(): void
-    {
+
+
+
+    // bikin data
+    public function run(): void{
         Catalog::create([
             'name' => 'Everyday Menu',
             'slug' => 'everyday',

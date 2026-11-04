@@ -1,7 +1,6 @@
 <?php
 
 namespace Database\Seeders;
-
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,8 +12,11 @@ class DatabaseSeeder extends Seeder
      *
      * The order matters: products (MenuSeeder) need the catalogs and categories first.
      */
-    public function run(): void
-    {
+
+
+
+    // mainnya, yg jalanin semua seeder
+    public function run(): void{
         $this->call([
             CatalogSeeder::class,
             CategorySeeder::class,

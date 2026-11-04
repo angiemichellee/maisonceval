@@ -14,18 +14,13 @@ class Catalog extends Model
         'name', 'slug', 'tagline', 'description', 'image', 'color', 'is_seasonal', 'is_active',
     ];
 
-    /**
-     * All catalogs that are shown on the website (is_active = 1).
-     * Returns a collection, so the controller can use where() / firstWhere().
-     */
-    public static function activeData()
-    {
-        return Catalog::all()->where('is_active', 1);
+    // kayak allData tp panggil yg active aja
+    public static function activeData() {
+        return Catalog::all()->where('is_active', 1); // semua row dibuat jd collection, lalu kl is_active 1 jd collection
     }
 
-    /** How many products this catalog has on the website. */
-    public function countMenus()
-    {
-        return Menu::visible()->where('catalog_id', $this->id)->count();
+    // menghitung menu
+    public function countMenus(){
+        return Menu::visible()->where('catalog_id', $this->id)->count(); // cek dulu di catalog id apa, di count buat muculin di card
     }
 }

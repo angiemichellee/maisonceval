@@ -9,17 +9,17 @@ use App\Models\Menu;
 
 class CatalogController extends Controller
 {
-    // One catalog and its products, e.g. /catalog/christmas
-    public function show($slug)
-    {
-        $catalog = Catalog::activeData()->firstWhere('slug', $slug);
+    // /catalog/christmas
+
+    public function show($slug) {
+        $catalog = Catalog::activeData()->firstWhere('slug', $slug); // dari active catalog simpan data pertama yg slugny sama
 
         return view('catalog', [
-            'title' => $catalog->name . ' · Maison Céval',
-            'active' => 'catalog',
-            'catalog' => $catalog,
-            'menus' => Menu::visible()->where('catalog_id', $catalog->id),
-            'catalogs' => Catalog::activeData(),
+            'title' => $catalog->name . ' · Maison Céval', 
+            'active' => 'catalog', // navbar activenya di catalog
+            'catalog' => $catalog, // semua detail catalog yg sedang dibuka di kirim ke view
+            'menus' => Menu::visible()->where('catalog_id', $catalog->id), // kl misal id katalog yg lg dibuka sama kyk id masing-masing menu
+            'catalogs' => Catalog::activeData(), 
             'categories' => Category::all(),
             'contact' => Contact::current(),
         ]);

@@ -12,8 +12,10 @@ class CategorySeeder extends Seeder
      *
      *   php artisan db:seed --class=CategorySeeder
      */
-    public function run(): void
-    {
+
+
+    
+    public function run(): void {
         Category::create([
             'name' => 'Cheesecakes',
             'slug' => 'cheesecakes',

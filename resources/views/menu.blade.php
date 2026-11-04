@@ -26,7 +26,7 @@
                 <a href="/menu" class="filter__pill {{ $selected == null ? 'is-active' : '' }}">All</a>
                 @foreach ($categories as $category)
                     <a href="/menu/category/{{ $category->slug }}"
-                       class="filter__pill {{ $selected != null && $selected->id == $category->id ? 'is-active' : '' }}">{{ $category->name }}</a>
+                        class="filter__pill {{ $selected != null && $selected->id == $category->id ? 'is-active' : '' }}">{{ $category->name }}</a>
                 @endforeach
             </nav>
 

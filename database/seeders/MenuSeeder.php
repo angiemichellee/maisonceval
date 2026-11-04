@@ -15,20 +15,23 @@ class MenuSeeder extends Seeder
      *
      *   php artisan db:seed --class=MenuSeeder
      */
-    public function run(): void
-    {
-        // Find the catalogs and categories, so each product can store their id.
-        $everyday = Catalog::all()->firstWhere('slug', 'everyday');
+
+
+
+
+    public function run(): void{
+        $everyday = Catalog::all()->firstWhere('slug', 'everyday'); // cari catalog everyday pae slug trs simpen semua row di variable
         $christmas = Catalog::all()->firstWhere('slug', 'christmas');
 
         $cheesecakes = Category::all()->firstWhere('slug', 'cheesecakes');
         $tarts = Category::all()->firstWhere('slug', 'tarts');
         $littleTreats = Category::all()->firstWhere('slug', 'little-treats');
 
-        $christmasExtras = 'Merry Christmas topper, greeting card & ribbon';
+        $christmasExtras = 'Merry Christmas topper, greeting card & ribbon'; // biar gampang aja
+
+
 
         // ===================== Everyday Menu =====================
-
         Menu::create([
             'catalog_id' => $everyday->id,
             'category_id' => $cheesecakes->id,
@@ -159,8 +162,10 @@ class MenuSeeder extends Seeder
         ]);
 
 
-        // ===================== Christmas Collection =====================
 
+
+
+        // ===================== Christmas Collection =====================
         Menu::create([
             'catalog_id' => $christmas->id,
             'category_id' => $cheesecakes->id,

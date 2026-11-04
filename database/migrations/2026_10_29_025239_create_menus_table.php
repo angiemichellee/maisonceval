@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->integer('catalog_id');                     // id from the catalogs table
-            $table->integer('category_id');                    // id from the categories table
+            $table->integer('catalog_id');                     // id catalogs 
+            $table->integer('category_id');                    // id categories
             $table->string('name');
-            $table->string('slug')->unique();                  // used in the URL: /menu/lemon-pie-tart
+            $table->string('slug')->unique();                  // /menu/lemon-pie-tart
             $table->integer('price');
             $table->text('description');
-            $table->string('image')->nullable();               // e.g. images/products/lemon-pie-tart.jpg
+            $table->string('image')->nullable();               // images/products/lemon-pie-tart.jpg
             $table->text('variants')->nullable();              // flavours, saved as JSON text
-            $table->string('includes')->nullable();            // e.g. Merry Christmas topper, card & ribbon
-            $table->boolean('is_available')->default(true);    // false = hidden from the website
+            $table->string('includes')->nullable();            // kyk Merry Christmas topper, card & ribbon
+            $table->boolean('is_available')->default(true);    // false = hidden dari website
             $table->timestamps();
         });
     }

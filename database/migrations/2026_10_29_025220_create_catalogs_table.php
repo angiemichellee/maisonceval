@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up(): void //buat table tp tdk mengembalikan apapun
     {
         Schema::create('catalogs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');                          // Everyday Menu, Christmas Collection
-            $table->string('slug')->unique();                // used in the URL: /catalog/christmas
+            $table->string('name');                           // Everyday Menu, Christmas Collection
+            $table->string('slug')->unique();                 // /catalog/christmas
             $table->string('tagline')->nullable();
             $table->text('description')->nullable();
-            $table->string('image')->nullable();             // cover photo, e.g. images/products/x.jpg
-            $table->string('color')->default('#64501B');     // banner colour
-            $table->boolean('is_seasonal')->default(false);  // true = Christmas, Halloween...
-            $table->boolean('is_active')->default(true);     // false = hidden from the website
+            $table->string('image')->nullable();              // cover photo, e.g. images/products/x.jpg
+            $table->string('color')->default('#64501B');    // banner colour
+            $table->boolean('is_seasonal')->default(false);   // true = Christmas, Halloween...
+            $table->boolean('is_active')->default(true);      // false = hidden dari website
             $table->timestamps();
         });
     }

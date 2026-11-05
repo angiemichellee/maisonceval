@@ -29,7 +29,7 @@ class Contact extends Model
 
 
     public function instagramUrl(){
-        return 'https://instagram.com/' . $this->instagram;
+        return 'https://www.instagram.com/maisonceval';
     }
 
 
@@ -50,10 +50,10 @@ class Contact extends Model
 
     public function orderUrl($message = 'Hello Maison Céval, I would like to place an order.') {
         if ($this->whatsappNumber() != '') {
-            return 'https://api.whatsapp.com/send/?phone=6285190071733&text&type=phone_number&app_absent=0' . $this->whatsappNumber() . '?text=' . rawurlencode($message);
+            return 'https://api.whatsapp.com/send/?phone=6285190071733&text&type=phone_number&app_absent=0';
         }
 
-        return 'https://ig.me/m/' . $this->instagram;
+        return 'https://www.instagram.com/maisonceval';
     }
 
 

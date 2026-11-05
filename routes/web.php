@@ -18,9 +18,4 @@ Route::get('/menu', [MenuController::class, 'index']);
 Route::get('/menu/category/{slug}', [MenuController::class, 'category']); // nampilin perkategori tart, cake
 Route::get('/menu/{slug}', [MenuController::class, 'show']); // per produk
 
-// Old addresses, so links people saved still work
-// langsung mengarahkan ke tujuan, tanpa pindah page dan membawa data
-// Route::redirect('/catalog', '/#catalogs');
-// Route::redirect('/category', '/#catalogs');
-// Route::redirect('/contact', '/#contact');
-// Route::redirect('/christmas', '/catalog/christmas');
+

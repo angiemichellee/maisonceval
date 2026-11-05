@@ -8,7 +8,7 @@
         <div class="container">
             <p class="eyebrow eyebrow--center">Menu</p>
 
-            @if ($selected == null)
+            @if ($selected == null) {{-- buat filter, kl all keluar all menu. kl filter sesuai sama kategorinya --}}
                 <h1 class="page-hero__title">Our Menu</h1>
                 <p class="page-hero__lead">Every cake, tart and treat we bake, with prices. Everything is made to order.</p>
             @else
@@ -18,23 +18,25 @@
         </div>
     </section>
 
+
     <section class="section section--flush-top">
         <div class="container">
 
-            {{-- Category filter: All / Cheesecakes / Tarts / Little Treats --}}
+            {{-- Button Category filter: All / Cheesecakes / Tarts / Little Treats --}}
             <nav class="filter" aria-label="Filter by category">
-                <a href="/menu" class="filter__pill {{ $selected == null ? 'is-active' : '' }}">All</a>
+                <a href="/menu" class="filter__pill {{ $selected == null ? 'is-active' : '' }}">All</a> 
                 @foreach ($categories as $category)
                     <a href="/menu/category/{{ $category->slug }}"
                         class="filter__pill {{ $selected != null && $selected->id == $category->id ? 'is-active' : '' }}">{{ $category->name }}</a>
                 @endforeach
             </nav>
 
+            {{-- kl kategori ga ada menunya --}}
             @if ($menus->isEmpty())
                 <p class="empty-state">No cakes here yet. Please check back soon.</p>
             @endif
 
-            {{-- One section per catalog: Everyday Menu, Christmas Collection, ... --}}
+            {{-- loop per katalog kyk Everyday Menu, Christmas Collection --}}
             @foreach ($catalogs as $catalog)
                 @php
                     $items = $menus->where('catalog_id', $catalog->id);
@@ -49,7 +51,7 @@
                         <a href="/catalog/{{ $catalog->slug }}" class="link-arrow menu-group__link">View catalog <span aria-hidden="true">&rarr;</span></a>
                     </div>
                     <div class="product-grid">
-                        @foreach ($items as $menu)
+                        @foreach ($items as $menu) {{-- loop per menu --}}
                             @include('layout.productcard', ['menu' => $menu])
                         @endforeach
                     </div>

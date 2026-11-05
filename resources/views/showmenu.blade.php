@@ -8,7 +8,7 @@
         $message = 'Hello Maison Céval, I would like to order the ' . $menu->name . ' (' . $menu->priceLabel() . ').';
     @endphp
 
-    <section class="product {{ $catalog->is_seasonal ? 'product--seasonal' : '' }}">
+    <section class="product {{ $catalog->is_seasonal ? 'product--seasonal' : '' }}"> {{-- cek kl seasonal ga --}}
         <div class="container">
             <div class="product__grid" style="--accent: {{ $catalog->color }}">
                 <div class="product__media">
@@ -24,7 +24,7 @@
 
                     <p class="product__desc">{{ $menu->description }}</p>
 
-                    {{-- Flavours (only for products that have them, e.g. Chizu) --}}
+                    {{-- kalo ada variant --}}
                     @if (count($menu->variantList()) > 0)
                         <div class="product__block">
                             <h2 class="product__label">{{ count($menu->variantList()) > 1 ? 'Choose a flavour' : 'Flavour' }}</h2>
@@ -41,6 +41,8 @@
                         </div>
                     @endif
 
+
+                    {{-- kl ada includesnya --}}
                     @if ($menu->includes)
                         <div class="product__block product__includes">
                             <h2 class="product__label">Includes</h2>
@@ -48,6 +50,8 @@
                         </div>
                     @endif
 
+
+                    {{-- button WA sm back ke catalog --}}
                     <div class="product__actions">
                         <a href="{{ $contact->orderUrl($message) }}" class="btn {{ $catalog->is_seasonal ? 'btn--accent' : '' }}" target="_blank" rel="noopener">
                             Order via {{ $contact->orderChannel() }}
@@ -60,6 +64,7 @@
             </div>
         </div>
     </section>
+
 
     {{-- ============ YOU MAY ALSO LIKE ============ --}}
     @if ($related->isNotEmpty())

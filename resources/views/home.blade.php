@@ -71,15 +71,15 @@
             </div>
 
             <div class="category-tiles">
-                @foreach ($categories as $category)
+                @foreach ($categories as $category) {{-- dari HomeController --}}
                     @php
-                        // The products in this category; the first one is the cover photo
-                        $items = $menus->where('category_id', $category->id);
+                        // menyaring perkategori dan menyimpan yg id pertama buat cover photo
+                        $items = $menus->where('category_id', $category->id); 
                     @endphp
 
-                    @continue($items->isEmpty())
+                    @continue($items->isEmpty()) {{-- kl kategori ga pny menu lgsng lanjut ke kategori lain --}}
 
-                    <a href="/menu/category/{{ $category->slug }}" class="category-tile" data-reveal>
+                    <a href="/menu/category/{{ $category->slug }}" class="category-tile" data-reveal> {{-- /menu/category/everyday --}}
                         <div class="arch category-tile__media">
                             <img src="/{{ $items->first()->image }}" alt="{{ $category->name }}" loading="lazy" width="600" height="800">
                         </div>

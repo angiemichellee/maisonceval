@@ -5,12 +5,12 @@
 @section('content')
 
     {{-- ============ BANNER (colour from the catalog's "color" column) ============ --}}
-    <section class="catalog-hero {{ $catalog->is_seasonal ? 'catalog-hero--seasonal' : '' }}" style="--accent: {{ $catalog->color }}">
+    <section class="catalog-hero {{ $catalog->is_seasonal ? 'catalog-hero--seasonal' : '' }}" style="--accent: {{ $catalog->color }}"> {{-- cek sesonal bkn --}}
         <div class="catalog-hero__lights" aria-hidden="true"></div>
         <div class="container catalog-hero__grid">
             <div class="catalog-hero__copy">
                 <p class="eyebrow eyebrow--gold">
-                    {{ $catalog->is_seasonal ? 'Limited edition' : 'All year round' }} · {{ $menus->count() }} items
+                    {{ $catalog->is_seasonal ? 'Limited edition' : 'All year round' }} · {{ $menus->count() }} items {{-- kl sesaonal limited edition --}}
                 </p>
                 <h1 class="catalog-hero__title">{{ $catalog->name }}</h1>
                 <p class="catalog-hero__lead">{{ $catalog->description }}</p>
@@ -27,11 +27,11 @@
     {{-- ============ PRODUCTS, grouped by category ============ --}}
     <section class="section" id="products">
         <div class="container">
-            @if ($menus->isEmpty())
+            @if ($menus->isEmpty()) {{-- kl categorynya ga ada menu --}}
                 <p class="empty-state">Products for this catalog will be announced soon.</p>
             @endif
 
-            @foreach ($categories as $category)
+            @foreach ($categories as $category) {{-- dari CatalogController, looping per category --}}
                 @php
                     $items = $menus->where('category_id', $category->id);
                 @endphp
@@ -44,7 +44,7 @@
                         <p>{{ $category->description }}</p>
                     </div>
                     <div class="product-grid">
-                        @foreach ($items as $menu)
+                        @foreach ($items as $menu) {{-- looping per menu --}}
                             @include('layout.productcard', ['menu' => $menu])
                         @endforeach
                     </div>
